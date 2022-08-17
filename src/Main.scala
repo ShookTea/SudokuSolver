@@ -7,9 +7,12 @@ object Main {
     } else if (args.head == "--test") {
       println("Running tests")
     } else {
-      val input = args.last
+      val input = args.last.trim
       val byStep = args contains "--step"
       val showGrid = args contains "--grid"
+
+      val grid = Grid(input)
+      println(grid)
     }
   }
 }
