@@ -20,6 +20,7 @@ object Main {
 
   def solve(input: String, byStep: Boolean, showGrid: Boolean): Grid = {
     val grid = Grid(input)
+    GridDisplay(grid)
     grid
   }
 }
