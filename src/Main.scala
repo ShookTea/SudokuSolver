@@ -25,18 +25,17 @@ object Main {
       println("Input grid:")
       GridDisplay(grid)
     }
-    var message: Option[String] = None
+    var change: Boolean = false
     var gridStep: Grid = grid
     do {
       val stepResult = Strategy runStep gridStep
-      message = stepResult._2
-      gridStep = stepResult._1
+      change = gridStep != stepResult
+      gridStep = stepResult
 
-      if (byStep && message.nonEmpty) {
-        message foreach println
-        if (showGrid) GridDisplay(gridStep)
+      if (byStep && change && showGrid) {
+        GridDisplay(gridStep)
       }
-    } while (message.nonEmpty)
+    } while (change)
 
     grid
   }

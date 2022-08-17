@@ -2,6 +2,7 @@ package eu.shooktea.sudoku
 
 case class Cell(possibleValues: Seq[Int]) {
   def convertToString: String = if (possibleValues.length == 1) possibleValues.head.toString else "x"
+  def isSolved: Boolean = possibleValues.length == 1
 }
 
 object Cell {

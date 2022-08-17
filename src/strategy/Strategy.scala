@@ -2,19 +2,13 @@ package eu.shooktea.sudoku
 package strategy
 
 trait Strategy {
-  def applyStrategy(grid: Grid): (Grid,Option[String])
+  def applyStrategy(grid: Grid): Grid
 }
 
 object Strategy {
-  val strategies: Seq[Strategy] = Seq()
+  val strategies: Seq[Strategy] = Seq(
+    NakedSingleStrategy,
+  )
 
-  def runStep(grid: Grid): (Grid,Option[String]) = {
-    for (s <- strategies) {
-      val strategyResult = s applyStrategy grid
-      if (strategyResult._2.nonEmpty) {
-        return strategyResult
-      }
-    }
-    (grid, None)
-  }
+  def runStep(grid: Grid): Grid = strategies.foldLeft(grid)((g, strategy) => strategy.applyStrategy(g))
 }
