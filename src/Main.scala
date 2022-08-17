@@ -11,8 +11,15 @@ object Main {
       val byStep = args contains "--step"
       val showGrid = args contains "--grid"
 
-      val grid = Grid(input)
-      println(grid)
+      val result = solve(input, byStep, showGrid)
+      val resultMessage = if (result.isSolved) "solved" else "not solved"
+      println(s"Result: ($resultMessage)")
+      println(result.convertToString)
     }
+  }
+
+  def solve(input: String, byStep: Boolean, showGrid: Boolean): Grid = {
+    val grid = Grid(input)
+    grid
   }
 }

@@ -1,7 +1,8 @@
 package eu.shooktea.sudoku
 
 case class Grid(cells: Seq[Cell]) {
-
+  def convertToString: String = cells.map(_.convertToString).mkString
+  def isSolved: Boolean = cells.forall(_.possibleValues.length == 1)
 }
 
 object Grid {

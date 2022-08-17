@@ -1,6 +1,8 @@
 package eu.shooktea.sudoku
 
-case class Cell(possibleValues: Seq[Int])
+case class Cell(possibleValues: Seq[Int]) {
+  def convertToString: String = if (possibleValues.length == 1) possibleValues.head.toString else "x"
+}
 
 object Cell {
   def fromChar(c: Char): Cell = {
