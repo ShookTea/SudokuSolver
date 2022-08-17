@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="eu.shooktea.sudoku.Main" />
+    <module name="SudokuSolver" />
+    <option name="PROGRAM_PARAMETERS" value="123" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="eu.shooktea.sudoku.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
