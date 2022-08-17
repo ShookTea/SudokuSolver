@@ -1,5 +1,7 @@
 package eu.shooktea.sudoku
 
+import strategy.Strategy
+
 object Main {
   def main(args: Array[String]): Unit = {
     if (args.length == 0) {
@@ -7,7 +9,7 @@ object Main {
     } else if (args.head == "--test") {
       println("Running tests")
     } else {
-      val input = args.last.trim
+      val input = Grid(args.last.trim)
       val byStep = args contains "--step"
       val showGrid = args contains "--grid"
 
@@ -18,9 +20,24 @@ object Main {
     }
   }
 
-  def solve(input: String, byStep: Boolean, showGrid: Boolean): Grid = {
-    val grid = Grid(input)
-    GridDisplay(grid)
+  def solve(grid: Grid, byStep: Boolean, showGrid: Boolean): Grid = {
+    if (showGrid && byStep) {
+      println("Input grid:")
+      GridDisplay(grid)
+    }
+    var message: Option[String] = None
+    var gridStep: Grid = grid
+    do {
+      val stepResult = Strategy runStep gridStep
+      message = stepResult._2
+      gridStep = stepResult._1
+
+      if (byStep && message.nonEmpty) {
+        message foreach println
+        if (showGrid) GridDisplay(gridStep)
+      }
+    } while (message.nonEmpty)
+
     grid
   }
 }
