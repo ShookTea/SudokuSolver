@@ -2,7 +2,7 @@
   <configuration default="false" name="Run with steps" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="eu.shooktea.sudoku.Main" />
     <module name="SudokuSolver" />
-    <option name="PROGRAM_PARAMETERS" value="--step --grid 9xxx6x1x56xxxx7xxxxxx1xxx297xxxx3x4x4xxx9xxxxx2xxx63xxxxxxxx5x8xxx7xxx1xxxxx2xxx3" />
+    <option name="PROGRAM_PARAMETERS" value="--step --grid xxx4x3xxx67xxxxx25x8xxxxxxx3xx6xxx5xxxxx5218xxxxxxx967xxxxxxx1xxxxx45xxx1x6xxx7xx" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="eu.shooktea.sudoku.*" />
