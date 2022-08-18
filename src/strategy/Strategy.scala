@@ -2,7 +2,7 @@ package eu.shooktea.sudoku
 package strategy
 
 trait Strategy {
-  def applyStrategy(grid: Grid): Grid
+  def applyStrategy(grid: Grid, stepLogger: StepLogger): Grid
 }
 
 object Strategy {
@@ -10,5 +10,6 @@ object Strategy {
     NakedSingleStrategy,
   )
 
-  def runStep(grid: Grid): Grid = strategies.foldLeft(grid)((g, strategy) => strategy.applyStrategy(g))
+  def runStep(grid: Grid, stepLogger: StepLogger): Grid =
+    strategies.foldLeft(grid)((g, strategy) => strategy.applyStrategy(g, stepLogger))
 }

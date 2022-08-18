@@ -21,6 +21,8 @@ object Main {
   }
 
   def solve(grid: Grid, byStep: Boolean, showGrid: Boolean): Grid = {
+    val stepLogger = StepLogger(byStep)
+
     if (showGrid && byStep) {
       println("Input grid:")
       GridDisplay(grid)
@@ -28,7 +30,7 @@ object Main {
     var change: Boolean = false
     var gridStep: Grid = grid
     do {
-      val stepResult = Strategy runStep gridStep
+      val stepResult = Strategy.runStep(gridStep, stepLogger)
       change = gridStep != stepResult
       gridStep = stepResult
 
