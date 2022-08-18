@@ -2,7 +2,7 @@
   <configuration default="false" name="Run" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="eu.shooktea.sudoku.Main" />
     <module name="SudokuSolver" />
-    <option name="PROGRAM_PARAMETERS" value="123" />
+    <option name="PROGRAM_PARAMETERS" value="--grid 9xxx6x1x56xxxx7xxxxxx1xxx297xxxx3x4x4xxx9xxxxx2xxx63xxxxxxxx5x8xxx7xxx1xxxxx2xxx3" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="eu.shooktea.sudoku.*" />

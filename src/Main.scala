@@ -23,7 +23,7 @@ object Main {
   def solve(grid: Grid, byStep: Boolean, showGrid: Boolean): Grid = {
     val stepLogger = StepLogger(byStep)
 
-    if (showGrid && byStep) {
+    if (showGrid) {
       println("Input grid:")
       GridDisplay(grid)
     }
@@ -39,6 +39,10 @@ object Main {
       }
     } while (change)
 
+    if (showGrid) {
+      println("Output grid:")
+      GridDisplay(gridStep)
+    }
     gridStep
   }
 }
