@@ -4,10 +4,24 @@ case class Grid(cells: Seq[Cell]) {
   def convertToString: String = cells.map(_.convertToString).mkString
   def isSolved: Boolean = cells.forall(_.isSolved)
 
-  def row(i: Int): Seq[Cell] = cells.slice(i * 9, i * 9 + 9)
-  def rows: Seq[Seq[Cell]] = for (i <- 0 to 8) yield row(i)
+  def setCells(newCells: Seq[Cell]): Grid = Grid(
+    cells map {
+      c => newCells.find(_.index == c.index) match {
+        case None => c
+        case Some(newCell) => newCell
+      }
+    }
+  )
+
+  def row(i: Int): Seq[Cell] = cells.filter(_.row == i)
+  def rows: Seq[Seq[Cell]] = for (i <- 1 to 9) yield row(i)
   def mapRows(converter: Seq[Cell] => Seq[Cell]): Grid =
-    Grid(rows.map(converter).reduce(_ concat _))
+    rows.map(converter).foldLeft(this)((grid, cells) => grid setCells cells)
+
+  def column(i: Int): Seq[Cell] = cells.filter(_.column == i)
+  def columns: Seq[Seq[Cell]] = for (i <- 1 to 9) yield column(i)
+  def mapColumns(converter: Seq[Cell] => Seq[Cell]): Grid =
+    columns.map(converter).foldLeft(this)((grid, cells) => grid setCells cells)
 }
 
 object Grid {
