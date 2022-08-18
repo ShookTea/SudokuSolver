@@ -3,6 +3,7 @@ package eu.shooktea.sudoku
 case class Cell(possibleValues: Seq[Int], index: Int) {
   val convertToString: String = if (possibleValues.length == 1) possibleValues.head.toString else "x"
   val isSolved: Boolean = possibleValues.length == 1
+  val notSolved: Boolean = !isSolved
 
   val row: Int = (index - index % 9) / 9 + 1
   val column: Int = index % 9 + 1
@@ -22,6 +23,9 @@ case class Cell(possibleValues: Seq[Int], index: Int) {
     }
 
   val position: String = s"R${row}C${column}"
+
+  def containsAnyOf(pair: (Int, Int)): Boolean = possibleValues.contains(pair._1) || possibleValues.contains(pair._2)
+  def withoutAnyOf(pair: (Int, Int)): Cell = Cell(possibleValues.filter(i => i != pair._1 && i != pair._2), index)
 }
 
 object Cell {

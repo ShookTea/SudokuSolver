@@ -9,6 +9,7 @@ object Strategy {
   val strategies: Seq[Strategy] = Seq(
     NakedSingleStrategy,
     HiddenSingleStrategy,
+    NakedPairStrategy,
   )
 
   def runStep(grid: Grid, stepLogger: StepLogger): Grid = {
