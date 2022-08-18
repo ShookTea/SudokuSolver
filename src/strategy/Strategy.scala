@@ -10,6 +10,11 @@ object Strategy {
     NakedSingleStrategy,
   )
 
-  def runStep(grid: Grid, stepLogger: StepLogger): Grid =
-    strategies.foldLeft(grid)((g, strategy) => strategy.applyStrategy(g, stepLogger))
+  def runStep(grid: Grid, stepLogger: StepLogger): Grid = {
+    for (strategy <- strategies) {
+      val applied = strategy.applyStrategy(grid, stepLogger)
+      if (applied != grid) return applied
+    }
+    grid
+  }
 }
