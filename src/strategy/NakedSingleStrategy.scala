@@ -14,7 +14,7 @@ object NakedSingleStrategy extends Strategy {
       if (cell.isSolved)
         cell
       else
-        Cell(withoutNakedSingles)
+        Cell(withoutNakedSingles, cell.index)
     }
   }
 }

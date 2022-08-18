@@ -15,6 +15,7 @@ object Grid {
     if (input.length != 81) {
       throw new Exception(s"Input must contain exactly 81 characters, ${input.length} given")
     }
-    Grid(input map Cell.fromChar)
+    val cells = input.zipWithIndex map { case (char, index) => Cell.fromChar(char, index) }
+    Grid(cells)
   }
 }
