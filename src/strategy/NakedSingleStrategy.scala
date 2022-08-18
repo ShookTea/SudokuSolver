@@ -1,6 +1,8 @@
 package eu.shooktea.sudoku
 package strategy
 
+import scala.annotation.tailrec
+
 object NakedSingleStrategy extends Strategy {
   override def applyStrategy(grid: Grid, stepLogger: StepLogger): Grid = {
     grid.mapRows(mapGroup(stepLogger))
@@ -13,11 +15,35 @@ object NakedSingleStrategy extends Strategy {
 
   private def clearNakedSingleFromCells(nakedSingle: Cell, cells: Seq[Cell], stepLogger: StepLogger): Seq[Cell] = {
     val nakedSingleValue = nakedSingle.possibleValues.head
-    cells.map {
-      case c if !c.isSolved && c.possibleValues.contains(nakedSingleValue) =>
-        stepLogger(s"Naked single $nakedSingleValue in ${nakedSingle.position} removes $nakedSingleValue in ${c.position}")
-        Cell(c.possibleValues.filterNot(_ == nakedSingleValue), c.index)
-      case c => c
+    clearNakedSingleFromCellsImpl(nakedSingleValue, cells.toList, List(), List()) match {
+      case (newCells, updatedPositions) if updatedPositions.isEmpty => newCells
+      case (newCells, updatedPositions) =>
+        val updatedPositionsString = updatedPositions.mkString(", ")
+        stepLogger(s"Naked single $nakedSingleValue in ${nakedSingle.position} removes $nakedSingleValue in $updatedPositionsString")
+        newCells
     }
+  }
+
+  @tailrec
+  private def clearNakedSingleFromCellsImpl(
+   nakedSingle: Int,
+   remainingCells: List[Cell],
+   doneCells: List[Cell],
+   updatedPositions: List[String]
+ ): (Seq[Cell], List[String]) = remainingCells match {
+    case Nil => (doneCells.reverse, updatedPositions)
+    case cell :: tail if !cell.isSolved && cell.possibleValues.contains(nakedSingle) =>
+      clearNakedSingleFromCellsImpl(
+        nakedSingle,
+        tail,
+        Cell(cell.possibleValues.filterNot(_ == nakedSingle), cell.index) :: doneCells,
+        cell.position :: updatedPositions,
+      )
+    case cell :: tail => clearNakedSingleFromCellsImpl(
+      nakedSingle,
+      tail,
+      cell :: doneCells,
+      updatedPositions,
+    )
   }
 }
