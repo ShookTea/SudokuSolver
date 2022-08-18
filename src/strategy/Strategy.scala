@@ -8,6 +8,7 @@ trait Strategy {
 object Strategy {
   val strategies: Seq[Strategy] = Seq(
     NakedSingleStrategy,
+    HiddenSingleStrategy,
   )
 
   def runStep(grid: Grid, stepLogger: StepLogger): Grid = {
