@@ -7,16 +7,17 @@ object NakedSingleStrategy extends Strategy {
   }
 
   private def mapGroup(stepLogger: StepLogger)(group: Seq[Cell]): Seq[Cell] = {
-    val nakedSingles = group.filter(_.isSolved).map(_.possibleValues.head)
-    for (cell <- group) yield {
-      val withoutNakedSingles = cell.possibleValues.filterNot(nakedSingles contains _)
+    val nakedSingleCells = group.filter(_.isSolved)
+    nakedSingleCells.foldLeft(group)((group, nakedSingle) => clearNakedSingleFromCells(nakedSingle, group, stepLogger))
+  }
 
-      if (cell.isSolved)
-        cell
-      else {
-        stepLogger(s"Naked singles removed in position ${cell.position}")
-        Cell(withoutNakedSingles, cell.index)
-      }
+  private def clearNakedSingleFromCells(nakedSingle: Cell, cells: Seq[Cell], stepLogger: StepLogger): Seq[Cell] = {
+    val nakedSingleValue = nakedSingle.possibleValues.head
+    cells.map {
+      case c if !c.isSolved && c.possibleValues.contains(nakedSingleValue) =>
+        stepLogger(s"Naked single $nakedSingleValue in ${nakedSingle.position} removes $nakedSingleValue in ${c.position}")
+        Cell(c.possibleValues.filterNot(_ == nakedSingleValue), c.index)
+      case c => c
     }
   }
 }
