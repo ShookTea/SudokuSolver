@@ -22,6 +22,14 @@ case class Grid(cells: Seq[Cell]) {
   def columns: Seq[Seq[Cell]] = for (i <- 1 to 9) yield column(i)
   def mapColumns(converter: Seq[Cell] => Seq[Cell]): Grid =
     columns.map(converter).foldLeft(this)((grid, cells) => grid setCells cells)
+
+  def box(i: Int): Seq[Cell] = cells.filter(_.box == i)
+  def boxes: Seq[Seq[Cell]] = for (i <- 1 to 9) yield box(i)
+  def mapBoxes(converter: Seq[Cell] => Seq[Cell]): Grid =
+    boxes.map(converter).foldLeft(this)((grid, cells) => grid setCells cells)
+
+  def mapSections(converter: Seq[Cell] => Seq[Cell]): Grid =
+    mapRows(converter).mapColumns(converter).mapBoxes(converter)
 }
 
 object Grid {

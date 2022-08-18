@@ -4,9 +4,8 @@ package strategy
 import scala.annotation.tailrec
 
 object NakedSingleStrategy extends Strategy {
-  override def applyStrategy(grid: Grid, stepLogger: StepLogger): Grid = {
-    grid.mapRows(mapGroup(stepLogger)).mapColumns(mapGroup(stepLogger))
-  }
+  override def applyStrategy(grid: Grid, stepLogger: StepLogger): Grid =
+    grid.mapSections(mapGroup(stepLogger))
 
   private def mapGroup(stepLogger: StepLogger)(group: Seq[Cell]): Seq[Cell] = {
     val nakedSingleCells = group.filter(_.isSolved)
