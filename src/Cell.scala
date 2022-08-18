@@ -1,9 +1,27 @@
 package eu.shooktea.sudoku
 
 case class Cell(possibleValues: Seq[Int], index: Int) {
-  def convertToString: String = if (possibleValues.length == 1) possibleValues.head.toString else "x"
-  def isSolved: Boolean = possibleValues.length == 1
-  def position: String = s"R${(index - index % 9) / 9 + 1}C${index % 9 + 1}"
+  val convertToString: String = if (possibleValues.length == 1) possibleValues.head.toString else "x"
+  val isSolved: Boolean = possibleValues.length == 1
+
+  val row: Int = (index - index % 9) / 9 + 1
+  val column: Int = index % 9 + 1
+  val box: Int =
+    if (Seq(1, 2, 3) contains row) {
+      if (Seq(1, 2, 3) contains column) 1
+      else if (Seq(4, 5, 6) contains column) 2
+      else 3
+    } else if (Seq(4, 5, 6) contains row) {
+      if (Seq(1, 2, 3) contains column) 4
+      else if (Seq(4, 5, 6) contains column) 5
+      else 6
+    } else {
+      if (Seq(1, 2, 3) contains column) 7
+      else if (Seq(4, 5, 6) contains column) 8
+      else 9
+    }
+
+  val position: String = s"R${row}C${column}"
 }
 
 object Cell {
