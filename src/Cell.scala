@@ -3,6 +3,7 @@ package eu.shooktea.sudoku
 case class Cell(possibleValues: Seq[Int], index: Int) {
   def convertToString: String = if (possibleValues.length == 1) possibleValues.head.toString else "x"
   def isSolved: Boolean = possibleValues.length == 1
+  def position: String = s"R${(index - index % 9) / 9 + 1}C${index % 9 + 1}"
 }
 
 object Cell {

@@ -13,8 +13,10 @@ object NakedSingleStrategy extends Strategy {
 
       if (cell.isSolved)
         cell
-      else
+      else {
+        stepLogger(s"Naked singles removed in position ${cell.position}")
         Cell(withoutNakedSingles, cell.index)
+      }
     }
   }
 }
