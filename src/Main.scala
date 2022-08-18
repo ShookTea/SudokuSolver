@@ -39,6 +39,6 @@ object Main {
       }
     } while (change)
 
-    grid
+    gridStep
   }
 }
