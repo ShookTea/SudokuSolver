@@ -28,6 +28,7 @@ case class Grid(cells: Seq[Cell]) {
   def mapBoxes(converter: Seq[Cell] => Seq[Cell]): Grid =
     boxes.map(converter).foldLeft(this)((grid, cells) => grid setCells cells)
 
+  def sections: Seq[Seq[Cell]] = Seq(rows, columns, boxes).flatten
   def mapSections(converter: Seq[Cell] => Seq[Cell]): Grid =
     mapRows(converter).mapColumns(converter).mapBoxes(converter)
 }

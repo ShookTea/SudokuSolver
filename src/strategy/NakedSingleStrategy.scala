@@ -1,48 +1,31 @@
 package eu.shooktea.sudoku
 package strategy
 
-import scala.annotation.tailrec
+class NakedSingleStrategy(stepLogger: StepLogger) {
+  def mapGrid(grid: Grid): Grid = grid.cells
+    .filter(_.isSolved)
+    .foldLeft(grid)(clearNakedSingle)
 
-object NakedSingleStrategy extends Strategy {
-  override def applyStrategy(grid: Grid, stepLogger: StepLogger): Grid =
-    grid.mapSections(mapGroup(stepLogger))
+  def clearNakedSingle(grid: Grid, nakedSingle: Cell): Grid = {
+    val nakedValue = nakedSingle.possibleValues.head
 
-  private def mapGroup(stepLogger: StepLogger)(group: Seq[Cell]): Seq[Cell] = {
-    val nakedSingleCells = group.filter(_.isSolved)
-    nakedSingleCells.foldLeft(group)((group, nakedSingle) => clearNakedSingleFromCells(nakedSingle, group, stepLogger))
-  }
-
-  private def clearNakedSingleFromCells(nakedSingle: Cell, cells: Seq[Cell], stepLogger: StepLogger): Seq[Cell] = {
-    val nakedSingleValue = nakedSingle.possibleValues.head
-    clearNakedSingleFromCellsImpl(nakedSingleValue, cells.toList, List(), List()) match {
-      case (newCells, updatedPositions) if updatedPositions.isEmpty => newCells
-      case (newCells, updatedPositions) =>
-        val updatedPositionsString = updatedPositions.mkString(", ")
-        stepLogger(s"Naked single $nakedSingleValue in ${nakedSingle.position} removes $nakedSingleValue in $updatedPositionsString")
-        newCells
+    val fixedCells = getFixedCellsForNakedSingle(grid, nakedSingle, nakedValue)
+    if (fixedCells.isEmpty) grid
+    else {
+      val updatedPositions = fixedCells.map(_.position).mkString(", ")
+      stepLogger(s"Naked single $nakedValue in position ${nakedSingle.position} removes $nakedValue in $updatedPositions")
+      grid setCells fixedCells
     }
   }
 
-  @tailrec
-  private def clearNakedSingleFromCellsImpl(
-   nakedSingle: Int,
-   remainingCells: List[Cell],
-   doneCells: List[Cell],
-   updatedPositions: List[String]
- ): (Seq[Cell], List[String]) = remainingCells match {
-    case Nil => (doneCells.reverse, updatedPositions)
-    case cell :: tail if !cell.isSolved && cell.possibleValues.contains(nakedSingle) =>
-      clearNakedSingleFromCellsImpl(
-        nakedSingle,
-        tail,
-        Cell(cell.possibleValues.filterNot(_ == nakedSingle), cell.index) :: doneCells,
-        cell.position :: updatedPositions,
-      )
-    case cell :: tail => clearNakedSingleFromCellsImpl(
-      nakedSingle,
-      tail,
-      cell :: doneCells,
-      updatedPositions,
-    )
-  }
+  def getFixedCellsForNakedSingle(grid: Grid, nakedSingle: Cell, nakedValue: Int): Seq[Cell] = grid.cells
+    .filter(_.notSolved)
+    .filter(_ sees nakedSingle)
+    .filter(_.possibleValues contains nakedValue)
+    .map(_.withoutAnyOf(Seq(nakedValue)))
+}
+
+object NakedSingleStrategy extends Strategy {
+  override def applyStrategy(grid: Grid, stepLogger: StepLogger): Grid =
+    new NakedSingleStrategy(stepLogger).mapGrid(grid)
 }

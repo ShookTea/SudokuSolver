@@ -10,6 +10,8 @@ object Strategy {
     NakedSingleStrategy,
     HiddenSingleStrategy,
     NakedPairStrategy,
+    NakedTripleStrategy,
+    PointingPairStrategy,
   )
 
   def runStep(grid: Grid, stepLogger: StepLogger): Grid = {

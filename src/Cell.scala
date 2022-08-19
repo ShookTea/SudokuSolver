@@ -24,8 +24,15 @@ case class Cell(possibleValues: Seq[Int], index: Int) {
 
   val position: String = s"R${row}C${column}"
 
+  def sees(cell: Cell): Boolean = index != cell.index && (row == cell.row || column == cell.column || box == cell.box)
+  def seesAllOf(cells: Seq[Cell]): Boolean = cells.forall(c => sees(c))
+
   def containsAnyOf(pair: (Int, Int)): Boolean = possibleValues.contains(pair._1) || possibleValues.contains(pair._2)
+  def containsAnyOf(values: Seq[Int]): Boolean = values.exists(possibleValues contains _)
+
   def withoutAnyOf(pair: (Int, Int)): Cell = Cell(possibleValues.filter(i => i != pair._1 && i != pair._2), index)
+  def withoutAnyOf(values: Seq[Int]): Cell = Cell(possibleValues.filterNot(values.contains), index)
+  def without(value: Int): Cell = Cell(possibleValues.filterNot(_ == value), index)
 }
 
 object Cell {
